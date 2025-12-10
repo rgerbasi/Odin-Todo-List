@@ -6,8 +6,99 @@
     <title>To Do List</title>
 </head>
 <body>
-    <h1>To Do List</h1>
-    <div class="container"></div>
+    <!-- svgs and symbols -->
+    <svg style="display:none" aria-hidden="true">
+        <symbol id="plus" viewBox="0 0 24 24">
+            <path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z"></path>
+        </symbol>
+
+        <symbol id="chevron-down" vieweBox="0 0 24 24">
+            <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path>
+        </symbol>
+
+        <symbol id="chevron-up" vieweBox="0 0 24 24">
+           <path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"></path>
+        </symbol>
+    </svg>
+    <section class="sidebar">
+        <div class="header">
+            <h1>Things To Do</h1>
+        </div>
+
+        <div class="project-list-header">
+          
+            <button id="new-project">
+                <svg><use href="#plus"></use></svg>
+            </button>
+            <h2>Projects</h2>
+        </div>
+
+        <div class="projects">
+            <button>Today</button>
+        </div>
+    </section>
+    <div class="resize-handle"></div>
+
+    <section class="content">
+        <!-- template -->
+        <div class="project">
+            <div class="project-header">
+                <h1 class="project-title">Today</h1>
+                <button id="new-task">
+                     Add Task
+                    <svg><use href="#plus"></use></svg>
+                </button>
+            </div>
+            <div class="project-body">
+                <h3>Tasks</h3>
+                <div class="task-list">
+                    <!-- task template -->
+                    <div class="task">
+                        <div class="task-header">
+                            <h3 class="task-name">Task name</h3>
+                            <svg><use href="#chevron-down"></use></svg>
+                        </div>
+                           <div class="task-body">
+                                detail 
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <template id="project-template">
+        <div class="project">
+            <div class="project-header">
+                <h1 class="project-title">Today</h1>
+                <button id="new-task">
+                     Add Task
+                    <svg><use href="#plus"></use></svg>
+                </button>
+            </div>
+            <div class="project-body">
+                <h3>Tasks</h3>
+                <div class="task-list">
+                    <!-- task template -->
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <template id="task-template">
+        <div class="task">
+            <div class="task-header">
+                <h3 class="task-name">Task name</h3>
+                <svg><use href="#chevron-down"></use></svg>
+            </div>
+
+            <div class="task-body">
+                detail 
+            </div>
+            
+        </div>
+    </template>
+
     
 </body>
 </html>
