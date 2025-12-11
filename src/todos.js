@@ -2,8 +2,8 @@
 import { format, } from "date-fns"
 
 
-export class ToDoItem {
-
+export class Task {
+    //fields
     title;
     description;
     dueDate;
@@ -17,7 +17,7 @@ export class ToDoItem {
         this.dueDate = properties.dueDate ?? new Date();
         this.priority = properties.priority;
     }
-    
+    //methods
 
 }
 
