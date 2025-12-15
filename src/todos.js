@@ -22,9 +22,11 @@ export class Task {
 }
 
 export class Project {
-    todos = [];
+    name;
+    tasks = [];
 
     constructor (properties = {}) {
-        this.todos = properties.todos;
+        this.name = properties.name ?? "Empty";
+        
     }
 }

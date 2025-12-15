@@ -19,6 +19,10 @@
         <symbol id="chevron-up" vieweBox="0 0 24 24">
            <path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"></path>
         </symbol>
+
+        <symbol id="close-circle" viewBox="0 0 24 24">
+            <path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2 12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" ></path>
+        </symbol>
     </svg>
     <section class="sidebar">
         <div class="header">
@@ -44,6 +48,75 @@
         
     </section>
 
+       <!-- title,description, duedate, priority, notes, checklist? -->
+
+    <dialog id="task-form-dialog" >
+        <div class="dialog-content">
+            <form action="">
+
+                    <div class="top-of-form">
+                        <h1 class="form-title">Add a Task</h1>
+                        <button id="x-button" class="svg-button">
+                            <svg><use href="#close-circle"></use></svg>
+                        </button>
+                    </div>
+
+                    <div class="form-fields">
+                        <label for="task-title" class="text-label">
+                            Task Title
+                            <input type="text" name="task-title" id="task-title" placeholder="Title" required>
+                        </label>
+                        <label for="due-date">
+                            Due Date
+                            <input type="datetime-local" name="due-date" id="due-date">
+                        </label>
+                    </div>
+
+                    <div class="form-fields">
+                        <label for="description">
+                            Description
+                            <textarea name="description" id="description"></textarea>
+                        </label>
+                        <label for="priority">
+                            Priority
+                            <select name="priority" id="priority">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <label for="checklist">
+                        Checklist
+                        <div class="add-to-checklist-fields">
+                            <input type="text" name="checklist-item" id="checklist">
+                            <button type="button" id="add-to-checklist">
+                                add
+                            </button>
+                        </div>
+                    </label>
+                    <div class="checklist-content">
+                
+                    </div>
+                    
+                    <label for="notes">
+                        Notes
+                        <textarea name="notes" id="notes"></textarea>
+                    </label>
+
+                    <div class="button-container">
+                        <button type="button" id="close-button">Close</button>
+                        <button type="submit" id="submit-button">
+                            Submit
+                        </button>
+                    </div>
+
+            </form>
+         
+        </div>
+    </dialog>
+
     <template id="project-template">
         <div class="project">
             <div class="project-header">
@@ -66,13 +139,26 @@
         <div class="task">
             <div class="task-header">
                 <h3 class="task-name">Task name</h3>
-                <svg><use href="#chevron-down"></use></svg>
+                <button class="expand">
+                    <svg><use href="#chevron-down"></use></svg>
+                </button>
             </div>
 
             <div class="task-body">
-                detail 
+                
             </div>
             
+        </div>
+    </template>
+
+    <template id="checklist-item-template">
+        <div class="checklist-item">
+            <div class="checklist-content" contenteditable="true">
+
+            </div>
+            <button>
+                <svg><use href="#close-circle"></use></svg>
+            </button>
         </div>
     </template>
 

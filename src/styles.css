@@ -47,7 +47,8 @@ ul {
 :root {
     --svg-size: 1.75rem;
     --min-width: 320px;
-
+  
+    --sidebar-background: rgb(235, 235, 235);
 }
 
 /* overall layout */
@@ -100,7 +101,7 @@ body {
   margin-top: 2rem;
 }
 .project-body > h3 {
-  border-bottom: 4px solid darkgrey;
+  border-bottom: 4px solid var(--sidebar-background);
 }
 .task-list {
   margin: 1rem 2rem;
@@ -114,9 +115,77 @@ body {
 .task-body {
   margin: 1rem 2rem;
 }
+
+/* form layout and styles */
+dialog {
+  margin: auto;
+  border: none;
+  background: none;
+}
+.dialog-content {
+  padding: 1.5rem 3rem;
+  border-radius: 16px;
+  background-color: var(--sidebar-background);
+     box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+form {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+}
+.top-of-form,
+form .button-container {
+  display: flex;
+  justify-content: space-between;
+
+}
+.form-fields {
+  display: flex;
+  gap: 2rem;
+}
+.form-fields > label {
+  flex: 1;
+}
+label {
+  display: flex;
+  flex-flow: column nowrap;
+}
+.add-to-checklist-fields {
+  display: flex;
+  gap: 1rem;
+}
+.add-to-checklist-fields > input{
+  flex: 1;
+}
+form button:not(.svg) {
+  border: white 2px solid;
+  padding: 0.25rem 2rem;
+  border-radius: 333px;
+  font-weight: bold;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  
+}
+textarea {
+  resize: none;
+  padding: 0.5rem;
+}
+select {
+  height: 50%;
+  margin-top: 0.5rem;
+}
+input,
+textarea,
+select {
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
 /* colors and styles */
 .sidebar {
-  background-color: rgb(235, 235, 235);
+  background-color: var(--sidebar-background);
 }
 
 button {
@@ -134,4 +203,7 @@ svg {
     cursor: ew-resize;
 }
 
+.dialog-content {
+
+}
 /* debug */
