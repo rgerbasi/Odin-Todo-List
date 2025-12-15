@@ -15,7 +15,7 @@ export class Display {
 
     //methods
     initialLoad() {
-        
+
     }
     cacheDOM(){
         this.DOM.sidebar = document.querySelector('.sidebar');
@@ -26,7 +26,11 @@ export class Display {
         this.templates.taskTemplate = document.querySelector('#task-template');
         this.templates.checklistTemplate = document.querySelector('#checklist-item-template');
 
-        this.dialog = document.querySelector('#task-form-dialog');
+        this.DOM.formDialog = document.querySelector('#task-form-dialog');
+        this.DOM.confirmDialog = document.querySelector('#confirm-dialog');
+        this.DOM.confirmDialogTitle = document.querySelector('#confirm-object');
+        this.DOM.confirmDialogNoButton = document.querySelector('#no');
+        this.DOM.confirmDialogYesButton = document.querySelector('#yes');
 
         this.DOM.form = {};
         this.DOM.form.title = document.querySelector('.form-title');
