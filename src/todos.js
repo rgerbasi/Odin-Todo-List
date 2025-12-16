@@ -27,6 +27,8 @@ export class Project {
 
     constructor (properties = {}) {
         this.name = properties.name ?? "Empty";
-        
     }
+    //methods
+    getName() { return this.name; }
+    setName(newName) { this.name = newName; }
 }

@@ -1,22 +1,24 @@
 //display.js
-import { 
-    Task, Project 
-} from "./todos.js";
 
 export class Display {
     //fields
     DOM = {};
     templates = {};
-    state = {};
 
     constructor (properties = {}) {
         this.cacheDOM();
+
     }
 
     //methods
-    initialLoad() {
-
+    renderProject(project) {
+        let currentProjectDOM = document.importNode(this.templates.projectTemplate.content,true);
+        let projectName = currentProjectDOM.querySelector('.project-title');
+        projectName.textContent = project.getName();
+        
+        this.DOM.content.appendChild(currentProjectDOM);
     }
+
     cacheDOM(){
         this.DOM.sidebar = document.querySelector('.sidebar');
         this.DOM.resizeHandle = document.querySelector('.resize-handle');
