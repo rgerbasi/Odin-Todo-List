@@ -11,18 +11,28 @@ export class Display {
     }
 
     //methods
+    renderSidebar(state) {
+        console.log(state);
+        state.projects.map( (project) => {
+            let button = document.createElement('button');
+            button.textContent = project.getName();
+            
+        });
+    }
     renderProject(project) {
         let currentProjectDOM = document.importNode(this.templates.projectTemplate.content,true);
         let projectName = currentProjectDOM.querySelector('.project-title');
         projectName.textContent = project.getName();
         
-        this.DOM.content.appendChild(currentProjectDOM);
+        this.DOM.projectContent.appendChild(currentProjectDOM);
     }
 
     cacheDOM(){
         this.DOM.sidebar = document.querySelector('.sidebar');
+        this.DOM.newProjectButton = document.querySelector('#new-project')
+        this.DOM.projectList = document.querySelector('.projects');
         this.DOM.resizeHandle = document.querySelector('.resize-handle');
-        this.DOM.content = document.querySelector('.content');
+        this.DOM.projectContent = document.querySelector('.project-content');
 
         this.templates.projectTemplate = document.querySelector('#project-template');
         this.templates.taskTemplate = document.querySelector('#task-template');

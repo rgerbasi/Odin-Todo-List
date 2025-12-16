@@ -19,6 +19,7 @@ class App {
         this.state.projects = [];
         this.state.projects.push(new Project({ name: 'Today' }));
         this.state.currentProject = this.state.projects[0];
+        this.display.renderSidebar(this.state);
         this.display.renderProject(this.state.currentProject);
     }
 
