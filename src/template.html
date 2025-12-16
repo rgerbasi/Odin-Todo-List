@@ -49,11 +49,24 @@
     </section>
 
        <!-- title,description, duedate, priority, notes, checklist? -->
+    
+    <dialog id="new-project-dialog" >
+        <div class="dialog-content">
+            <h1 id="new-project-h1">Create a new project</h1>
+            <label for="new-project">
+                Name
+                <input type="text" name="new-project" id="new-project">
+            </label>
+            <div class="button-container">
+                <button type="button" id="back-button">Back</button>
+                <button type="button" id="create-button">Create</button>
+            </div>
+        </div>
+    </dialog>
 
     <dialog id="task-form-dialog" >
         <div class="dialog-content">
             <form action="">
-
                     <div class="top-of-form">
                         <h1 class="form-title">Add a Task</h1>
                         <button id="x-button" class="svg-button">
