@@ -4,32 +4,60 @@ export class Display {
     //fields
     DOM = {};
     templates = {};
+    projectDOMs = {};
+    app;
 
-    constructor (properties = {}) {
+    constructor (app) {
         this.cacheDOM();
-
+        this.addInitialEventListeners();
+        this.app = app;
     }
 
     //methods
+    addInitialEventListeners() {
+        this.DOM.newProjectButton.addEventListener('click' , this.handleNewProjectClicked);
+        this.attachNewProjectDialogListeners();
+    }
+    attachNewProjectDialogListeners() {
+        this.DOM.newProjectDialogBackButton.addEventListener('click', this.handleClose);
+        this.DOM.newProjectDialog.addEventListener('click', this.handleClose);
+    }
+    attachFormListeners() {
+
+    }
+    attachConfirmDialogListeners() {
+
+    }
     renderSidebar(state) {
-        console.log(state);
         state.projects.map( (project) => {
             let button = document.createElement('button');
             button.textContent = project.getName();
-            
+            button.setAttribute('data-project', project.getName());
+            this.DOM.projectList.appendChild(button);
         });
     }
-    renderProject(project) {
+    createProjectPage(project) {
         let currentProjectDOM = document.importNode(this.templates.projectTemplate.content,true);
         let projectName = currentProjectDOM.querySelector('.project-title');
         projectName.textContent = project.getName();
-        
-        this.DOM.projectContent.appendChild(currentProjectDOM);
+
+        this.projectDOMs[project.getName()] = currentProjectDOM;
+        return currentProjectDOM;
     }
+    renderProjectPage(projectDOM) {
+        console.log(projectDOM)
+        console.log(this.DOM.projectContent.hasChildNodes())
+        if (this.DOM.projectContent.hasChildNodes()) {
+            
+        } else {
+            this.DOM.projectContent.appendChild(projectDOM);
+        }
+    }
+
 
     cacheDOM(){
         this.DOM.sidebar = document.querySelector('.sidebar');
-        this.DOM.newProjectButton = document.querySelector('#new-project')
+        this.DOM.newProjectButton = document.querySelector('#new-project-button')
         this.DOM.projectList = document.querySelector('.projects');
         this.DOM.resizeHandle = document.querySelector('.resize-handle');
         this.DOM.projectContent = document.querySelector('.project-content');
@@ -37,6 +65,12 @@ export class Display {
         this.templates.projectTemplate = document.querySelector('#project-template');
         this.templates.taskTemplate = document.querySelector('#task-template');
         this.templates.checklistTemplate = document.querySelector('#checklist-item-template');
+
+        this.DOM.newProjectDialog = document.querySelector('#new-project-dialog');
+        this.DOM.newProjectDialogTitle = document.querySelector('#new-project-h1');
+        this.DOM.newProjectDialogInput = document.querySelector('#new-project');
+        this.DOM.newProjectDialogBackButton = document.querySelector('#back-button');
+        this.DOM.newProjectDialogCreateButton = document.querySelector('#create-button');
 
         this.DOM.formDialog = document.querySelector('#task-form-dialog');
         this.DOM.confirmDialog = document.querySelector('#confirm-dialog');
@@ -58,9 +92,23 @@ export class Display {
         this.DOM.form.closeButton = document.querySelector('#close-button');
         this.DOM.form.submitButton = document.querySelector('#submit-button');
 
+    }
 
-        console.log(this.DOM);
-        console.log(this.templates);
+    //events 
+    handleNewProjectClicked = (event) => {
+        this.DOM.newProjectDialogTitle.textContent = 'Create new project';
+        //reset input in case
+        this.DOM.newProjectDialogInput.value = "";
+        this.DOM.newProjectDialog.showModal();
+    }
+    handeProjectListClicked = (event) => {
+
+    }
+    handleClose = (event) => {
+        let dialogToClose = event.target.closest('dialog');
+      
+        console.log(dialogToClose);
+        dialogToClose.close();
     }
 
 }

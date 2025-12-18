@@ -12,17 +12,20 @@ class App {
     display;
 
     constructor(){
-        this.display = new Display();
-
+        this.display = new Display(this);
     }
     init(){
         this.state.projects = [];
         this.state.projects.push(new Project({ name: 'Today' }));
         this.state.currentProject = this.state.projects[0];
         this.display.renderSidebar(this.state);
-        this.display.renderProject(this.state.currentProject);
+        this.display.renderProjectPage(this.display.createProjectPage(this.state.currentProject))
     }
 
+    changeCurrentProject(newProject) {
+        this.state.currentProject = newProject;
+        // this.display.renderProject(this.state);
+    }
 }
 
 const app = new App();

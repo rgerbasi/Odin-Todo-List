@@ -31,22 +31,19 @@
 
         <div class="project-list-header">
           
-            <button id="new-project">
+            <button id="new-project-button">
                 <svg><use href="#plus"></use></svg>
             </button>
             <h2>Projects</h2>
         </div>
 
         <div class="projects">
-            <button>Today</button>
+           
         </div>
     </section>
     <div class="resize-handle"></div>
 
-    <section class="project-content">
-        <!-- template -->
-        
-    </section>
+    <section class="project-content"></section>
 
        <!-- title,description, duedate, priority, notes, checklist? -->
     
@@ -109,9 +106,7 @@
                             </button>
                         </div>
                     </label>
-                    <div class="checklist-content">
-                
-                    </div>
+                    <div class="checklist-content"></div>
                     
                     <label for="notes">
                         Notes
@@ -144,7 +139,7 @@
         <div class="project">
             <div class="project-header">
                 <h1 class="project-title">Today</h1>
-                <button id="new-task">
+                <button class="new-task-button">
                      Add Task
                     <svg><use href="#plus"></use></svg>
                 </button>
@@ -167,18 +162,13 @@
                 </button>
             </div>
 
-            <div class="task-body">
-                
-            </div>
-            
+            <div class="task-body"></div>
         </div>
     </template>
 
     <template id="checklist-item-template">
         <div class="checklist-item">
-            <div class="checklist-content" contenteditable="true">
-
-            </div>
+            <div class="checklist-content" contenteditable="true"></div>
             <button>
                 <svg><use href="#close-circle"></use></svg>
             </button>
