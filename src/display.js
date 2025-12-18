@@ -4,7 +4,6 @@ export class Display {
     //fields
     DOM = {};
     templates = {};
-    projectDOMs = {};
     app;
 
     constructor (app) {
@@ -22,7 +21,7 @@ export class Display {
         this.DOM.newProjectDialogBackButton.addEventListener('click', this.handleClose);
         this.DOM.newProjectDialog.addEventListener('click', this.handleClose);
     }
-    attachFormListeners() {
+    attachTaskFormListeners() {
 
     }
     attachConfirmDialogListeners() {
@@ -36,19 +35,25 @@ export class Display {
             this.DOM.projectList.appendChild(button);
         });
     }
+    //project pages
     createProjectPage(project) {
         let currentProjectDOM = document.importNode(this.templates.projectTemplate.content,true);
         let projectName = currentProjectDOM.querySelector('.project-title');
         projectName.textContent = project.getName();
-
-        this.projectDOMs[project.getName()] = currentProjectDOM;
+        
+        this.attachEventListenersToProjectPage(currentProjectDOM);
         return currentProjectDOM;
     }
+    attachEventListenersToProjectPage(projectDOM) {
+        let addTaskButton = projectDOM.querySelector('.new-task-button');
+        addTaskButton.addEventListener('click', this.handleNewTaskClicked);
+        console.log(addTaskButton);
+    }
     renderProjectPage(projectDOM) {
-        console.log(projectDOM)
-        console.log(this.DOM.projectContent.hasChildNodes())
+
+        // console.log(this.DOM.projectContent.childNodes)
         if (this.DOM.projectContent.hasChildNodes()) {
-            
+            this.DOM.projectContent.childNodes[0].replaceWith(projectDOM);
         } else {
             this.DOM.projectContent.appendChild(projectDOM);
         }
@@ -72,7 +77,7 @@ export class Display {
         this.DOM.newProjectDialogBackButton = document.querySelector('#back-button');
         this.DOM.newProjectDialogCreateButton = document.querySelector('#create-button');
 
-        this.DOM.formDialog = document.querySelector('#task-form-dialog');
+        this.DOM.taskFormDialog = document.querySelector('#task-form-dialog');
         this.DOM.confirmDialog = document.querySelector('#confirm-dialog');
         this.DOM.confirmDialogTitle = document.querySelector('#confirm-object');
         this.DOM.confirmDialogNoButton = document.querySelector('#no');
@@ -100,6 +105,10 @@ export class Display {
         //reset input in case
         this.DOM.newProjectDialogInput.value = "";
         this.DOM.newProjectDialog.showModal();
+    }
+    handleNewTaskClicked = (event) => {
+        console.log('meow');
+        this.DOM.taskFormDialog.showModal();
     }
     handeProjectListClicked = (event) => {
 
