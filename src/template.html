@@ -143,6 +143,10 @@
                      Add Task
                     <svg><use href="#plus"></use></svg>
                 </button>
+                <button class="remove-project-button">
+                    Remove Project
+                    <svg><use href="#close-circle"></use></svg>
+                </button>
             </div>
             <div class="project-body">
                 <h3>Tasks</h3>
@@ -169,7 +173,7 @@
     <template id="checklist-item-template">
         <div class="checklist-item">
             <div class="checklist-content" contenteditable="true"></div>
-            <button>
+            <button type="button" class="svg-button">
                 <svg><use href="#close-circle"></use></svg>
             </button>
         </div>

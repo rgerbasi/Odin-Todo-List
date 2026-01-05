@@ -27,11 +27,13 @@ export class Display {
         });
     }
     attachTaskFormListeners() {
+        this.DOM.form.formNode.addEventListener('submit', this.handleNewTaskSubmitted);
+        this.DOM.form.addToChecklistButton.addEventListener('click', this.handleAddToChecklist);
         this.DOM.form.closeButton.addEventListener('click', this.handleClose);
         this.DOM.form.xButton.addEventListener('click', this.handleClose);
         this.DOM.taskFormDialog.addEventListener('click', (event)=> {
             if (event.target === this.DOM.taskFormDialog) this.handleClose(event);
-        })
+        });
     }
     attachConfirmDialogListeners() {
 
@@ -52,14 +54,14 @@ export class Display {
         projectName.textContent = project.getName();
 
         //attach tasks
-        
         this.attachEventListenersToProjectPage(currentProjectDOM);
         return currentProjectDOM;
     }
     attachEventListenersToProjectPage(projectDOM) {
         let addTaskButton = projectDOM.querySelector('.new-task-button');
         addTaskButton.addEventListener('click', this.handleOpenNewTaskDialog);
-
+        let removeProjectButton = projectDOM.querySelector('.remove-project-button');
+        removeProjectButton.addEventListener('click', this.handleRemoveProject);
     }
     renderProjectPage(projectDOM) {
         this.DOM.projectContent.textContent = "";
@@ -91,6 +93,7 @@ export class Display {
         this.DOM.confirmDialogYesButton = document.querySelector('#yes');
 
         this.DOM.form = {};
+        this.DOM.form.formNode = document.querySelector('#task-form-dialog form')
         this.DOM.form.title = document.querySelector('.form-title');
         this.DOM.form.xButton = document.querySelector('#x-button');
         this.DOM.form.taskTitle = document.querySelector('#task-title');
@@ -102,9 +105,9 @@ export class Display {
         this.DOM.form.checklistContent = document.querySelector('.checklist-content');
         this.DOM.form.notes = document.querySelector('#notes');
         this.DOM.form.closeButton = document.querySelector('#close-button');
-        this.DOM.form.submitButton = document.querySelector('#submit-button');
-
-    }
+        this.DOM.form.submitButton = document.querySelector('#submit-button'); 
+        
+    }   
 
     //events 
     handeProjectListClicked = (event) => {
@@ -117,8 +120,19 @@ export class Display {
         this.app.createProject(this.DOM.newProjectDialogInput.value);
         this.handleClose(event);
     }
-    handleNewTaskSubmitted = (event) => {
-        console.log('submitted');
+    handleAddToChecklist = (event) => {
+        let checklistItemText = this.DOM.form.checklistInput.value;
+        if (!checklistItemText) return;
+     
+        let checklistItemDOM = document.importNode(this.templates.checklistTemplate.content, true);
+        //populating Template
+        checklistItemDOM.querySelector('.checklist-content').textContent = checklistItemText;
+        //attaching remove checklist item listener to template
+        checklistItemDOM.querySelector('button').addEventListener('click', (event) => {
+            event.target.closest('.checklist-item').remove();
+        });
+        this.DOM.form.checklistContent.appendChild(checklistItemDOM);
+        this.DOM.form.checklistInput.value = "";
     }
     handleOpenNewProjectDialog = (event) => {
         this.DOM.newProjectDialogTitle.textContent = 'Create new project';
@@ -129,12 +143,20 @@ export class Display {
     handleOpenNewTaskDialog = (event) => {
         this.DOM.taskFormDialog.showModal();
     }
+    handleRemoveProject = (event) => {
+        console.log("beep removed");
+    }
  
     handleClose = (event) => {
         let dialogToClose = event.target.closest('dialog');
         // console.log(dialogToClose);
 
         dialogToClose.close();
+    }
+
+    handleNewTaskSubmitted = (event) => {
+        event.preventDefault();
+        console.log('submitted');
     }
 
 }

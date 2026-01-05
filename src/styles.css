@@ -92,7 +92,9 @@ body {
   display: flex;
   justify-content: space-between;
 }
-.new-task-button {
+.new-task-button,
+.remove-project-button
+{
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -166,6 +168,13 @@ label {
 .add-to-checklist-fields > input{
   flex: 1;
 }
+.checklist-item {
+  display: flex;
+}
+.checklist-content {
+  flex: 1;
+}
+
 form button:not(.svg-button),
 #confirm-dialog button,
 #new-project-dialog button {
@@ -185,12 +194,20 @@ select {
   height: 50%;
   margin-top: 0.5rem;
 }
+
+.checklist-content,
 input,
 textarea,
 select {
   border-radius: 6px;
-  border: 1px solid #ccc;
   background-color: white;
+  padding: 0.25rem 0.5rem;
+}
+
+input,
+textarea,
+select {
+  border: 1px solid #ccc;
 }
 /* confirm dialog layout and styles */
 #confirm-dialog .dialog-content {
