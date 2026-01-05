@@ -61,7 +61,7 @@ export class Display {
         let addTaskButton = projectDOM.querySelector('.new-task-button');
         addTaskButton.addEventListener('click', this.handleOpenNewTaskDialog);
         let removeProjectButton = projectDOM.querySelector('.remove-project-button');
-        removeProjectButton.addEventListener('click', this.handleRemoveProject);
+        removeProjectButton.addEventListener('click', this.handleRemoveProject); 
     }
     renderProjectPage(projectDOM) {
         this.DOM.projectContent.textContent = "";
@@ -113,7 +113,8 @@ export class Display {
     handeProjectListClicked = (event) => {
         let project = this.app.getProject(event.target.dataset.project);
         if (project) {
-            this.renderProjectPage(this.createProjectPage(project))
+            this.app.changeCurrentProject(project);
+            this.renderProjectPage(this.createProjectPage(project));
         }
     }
     handleCreateProject = (event) => {
@@ -156,7 +157,20 @@ export class Display {
 
     handleNewTaskSubmitted = (event) => {
         event.preventDefault();
-        console.log('submitted');
+
+        if (!this.DOM.form.formNode.checkValidity()) {
+            this.DOM.form.formNode.reportValidity();
+            return;
+        }
+        const taskData = Object.fromEntries(new FormData(this.DOM.form.formNode));
+        
+        let checklistItems = [];
+        //loop through checklistContent
+        this.DOM.form.checklistContent.querySelectorAll('.checklist-content').forEach( (node) => {
+            checklistItems.push(node.textContent);
+        })
+        taskData.checklist = checklistItems;
+        
     }
 
 }
