@@ -26,6 +26,10 @@ class App {
         this.state.currentProject = newProject;
         // this.display.renderProject(this.state);
     }
+    createProject(projectName) {
+        this.state.projects.push(new Project({ name: projectName}));
+        
+    }
 }
 
 const app = new App();

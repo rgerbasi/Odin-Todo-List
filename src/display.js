@@ -14,15 +14,23 @@ export class Display {
 
     //methods
     addInitialEventListeners() {
-        this.DOM.newProjectButton.addEventListener('click' , this.handleNewProjectClicked);
+        this.DOM.newProjectButton.addEventListener('click' , this.handleOpenNewProjectDialog);
         this.attachNewProjectDialogListeners();
+        this.attachTaskFormListeners();
     }
     attachNewProjectDialogListeners() {
         this.DOM.newProjectDialogBackButton.addEventListener('click', this.handleClose);
-        this.DOM.newProjectDialog.addEventListener('click', this.handleClose);
+        this.DOM.newProjectDialogCreateButton.addEventListener('click', this.handleCreateProject);
+        this.DOM.newProjectDialog.addEventListener('click', (event) => {
+            if (event.target === this.DOM.newProjectDialog) this.handleClose(event);
+        });
     }
     attachTaskFormListeners() {
-
+        this.DOM.form.closeButton.addEventListener('click', this.handleClose);
+        this.DOM.form.xButton.addEventListener('click', this.handleClose);
+        this.DOM.taskFormDialog.addEventListener('click', (event)=> {
+            if (event.target === this.DOM.taskFormDialog) this.handleClose(event);
+        })
     }
     attachConfirmDialogListeners() {
 
@@ -46,11 +54,10 @@ export class Display {
     }
     attachEventListenersToProjectPage(projectDOM) {
         let addTaskButton = projectDOM.querySelector('.new-task-button');
-        addTaskButton.addEventListener('click', this.handleNewTaskClicked);
-        console.log(addTaskButton);
+        addTaskButton.addEventListener('click', this.handleOpenNewTaskDialog);
+
     }
     renderProjectPage(projectDOM) {
-
         // console.log(this.DOM.projectContent.childNodes)
         if (this.DOM.projectContent.hasChildNodes()) {
             this.DOM.projectContent.childNodes[0].replaceWith(projectDOM);
@@ -100,23 +107,30 @@ export class Display {
     }
 
     //events 
-    handleNewProjectClicked = (event) => {
+    handeProjectListClicked = (event) => {
+
+    }
+    handleCreateProject = (event) => {
+        console.log(event);
+        console.log(this.DOM.newProjectDialogInput);
+    }
+    handleNewTaskSubmitted = (event) => {
+        console.log('submitted');
+    }
+    handleOpenNewProjectDialog = (event) => {
         this.DOM.newProjectDialogTitle.textContent = 'Create new project';
         //reset input in case
         this.DOM.newProjectDialogInput.value = "";
         this.DOM.newProjectDialog.showModal();
     }
-    handleNewTaskClicked = (event) => {
-        console.log('meow');
+    handleOpenNewTaskDialog = (event) => {
         this.DOM.taskFormDialog.showModal();
     }
-    handeProjectListClicked = (event) => {
-
-    }
+ 
     handleClose = (event) => {
         let dialogToClose = event.target.closest('dialog');
-      
         console.log(dialogToClose);
+
         dialogToClose.close();
     }
 
