@@ -15,6 +15,7 @@ export class Display {
     //methods
     addInitialEventListeners() {
         this.DOM.newProjectButton.addEventListener('click' , this.handleOpenNewProjectDialog);
+        this.DOM.projectList.addEventListener('click', this.handeProjectListClicked);
         this.attachNewProjectDialogListeners();
         this.attachTaskFormListeners();
     }
@@ -49,6 +50,8 @@ export class Display {
         let currentProjectDOM = document.importNode(this.templates.projectTemplate.content,true);
         let projectName = currentProjectDOM.querySelector('.project-title');
         projectName.textContent = project.getName();
+
+        //attach tasks
         
         this.attachEventListenersToProjectPage(currentProjectDOM);
         return currentProjectDOM;
@@ -59,12 +62,8 @@ export class Display {
 
     }
     renderProjectPage(projectDOM) {
-        // console.log(this.DOM.projectContent.childNodes)
-        if (this.DOM.projectContent.hasChildNodes()) {
-            this.DOM.projectContent.childNodes[0].replaceWith(projectDOM);
-        } else {
-            this.DOM.projectContent.appendChild(projectDOM);
-        }
+        this.DOM.projectContent.textContent = "";
+        this.DOM.projectContent.appendChild(projectDOM);
     }
 
 
@@ -109,7 +108,10 @@ export class Display {
 
     //events 
     handeProjectListClicked = (event) => {
-
+        let project = this.app.getProject(event.target.dataset.project);
+        if (project) {
+            this.renderProjectPage(this.createProjectPage(project))
+        }
     }
     handleCreateProject = (event) => {
         this.app.createProject(this.DOM.newProjectDialogInput.value);

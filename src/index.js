@@ -26,6 +26,9 @@ class App {
         this.state.currentProject = newProject;
         // this.display.renderProject(this.state);
     }
+    getProject(projectName) {
+        return this.state.projects.find( (obj) => obj.name === projectName );
+    }
     createProject(projectName) {
         this.state.projects.push(new Project({ name: projectName}));
         this.display.renderSidebar(this.state);
