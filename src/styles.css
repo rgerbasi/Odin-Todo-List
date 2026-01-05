@@ -166,7 +166,7 @@ label {
 .add-to-checklist-fields > input{
   flex: 1;
 }
-form button:not(.svg),
+form button:not(.svg-button),
 #confirm-dialog button,
 #new-project-dialog button {
   border: white 2px solid;
