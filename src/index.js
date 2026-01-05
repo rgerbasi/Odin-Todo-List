@@ -28,7 +28,7 @@ class App {
     }
     createProject(projectName) {
         this.state.projects.push(new Project({ name: projectName}));
-        
+        this.display.renderSidebar(this.state);
     }
 }
 

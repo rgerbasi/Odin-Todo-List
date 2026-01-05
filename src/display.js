@@ -36,6 +36,7 @@ export class Display {
 
     }
     renderSidebar(state) {
+        this.DOM.projectList.textContent = "";
         state.projects.map( (project) => {
             let button = document.createElement('button');
             button.textContent = project.getName();
@@ -111,8 +112,8 @@ export class Display {
 
     }
     handleCreateProject = (event) => {
-        console.log(event);
-        console.log(this.DOM.newProjectDialogInput);
+        this.app.createProject(this.DOM.newProjectDialogInput.value);
+        this.handleClose(event);
     }
     handleNewTaskSubmitted = (event) => {
         console.log('submitted');
@@ -129,7 +130,7 @@ export class Display {
  
     handleClose = (event) => {
         let dialogToClose = event.target.closest('dialog');
-        console.log(dialogToClose);
+        // console.log(dialogToClose);
 
         dialogToClose.close();
     }
