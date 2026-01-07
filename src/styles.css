@@ -105,10 +105,10 @@ body {
 .project-body > h3 {
   border-bottom: 4px solid var(--sidebar-background);
 }
+/* tasks styles */
 .task-list {
   margin: 1rem 2rem;
 }
-
 .task-header {
   display: flex;
   justify-content: space-between;
@@ -236,7 +236,5 @@ svg {
     cursor: ew-resize;
 }
 
-.dialog-content {
 
-}
 /* debug */

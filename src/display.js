@@ -15,7 +15,7 @@ export class Display {
     //methods
     addInitialEventListeners() {
         this.DOM.newProjectButton.addEventListener('click' , this.handleOpenNewProjectDialog);
-        this.DOM.projectList.addEventListener('click', this.handeProjectListClicked);
+        this.DOM.projectList.addEventListener('click', this.handleProjectListClicked);
         this.attachNewProjectDialogListeners();
         this.attachTaskFormListeners();
     }
@@ -40,7 +40,7 @@ export class Display {
     }
     renderSidebar(state) {
         this.DOM.projectList.textContent = "";
-        state.projects.map( (project) => {
+        state.projects.forEach( (project) => {
             let button = document.createElement('button');
             button.textContent = project.getName();
             button.setAttribute('data-project', project.getName());
@@ -49,11 +49,19 @@ export class Display {
     }
     //project pages
     createProjectPage(project) {
-        let currentProjectDOM = document.importNode(this.templates.projectTemplate.content,true);
+        let currentProjectDOM = document.importNode(this.templates.projectTemplate.content, true);
         let projectName = currentProjectDOM.querySelector('.project-title');
         projectName.textContent = project.getName();
 
-        //attach tasks
+        let taskListDOM = currentProjectDOM.querySelector('.task-list')
+        //for each task render dom and attach
+        project.getTasks().forEach( (task) => {
+            
+            taskListDOM.appendChild(this.createTaskDOM(task));
+  
+        })
+
+        //attach listeners
         this.attachEventListenersToProjectPage(currentProjectDOM);
         return currentProjectDOM;
     }
@@ -67,7 +75,14 @@ export class Display {
         this.DOM.projectContent.textContent = "";
         this.DOM.projectContent.appendChild(projectDOM);
     }
+    createTaskDOM(task) {
+        let taskDOM = document.importNode(this.templates.taskTemplate.content, true);
+        taskDOM.querySelector('.task-name').textContent = task.getTitle();
+        console.log(taskDOM);
+        //attach handlers 
 
+        return taskDOM;
+    }
 
     cacheDOM(){
         this.DOM.sidebar = document.querySelector('.sidebar');
@@ -110,7 +125,7 @@ export class Display {
     }   
 
     //events 
-    handeProjectListClicked = (event) => {
+    handleProjectListClicked = (event) => {
         let project = this.app.getProject(event.target.dataset.project);
         if (project) {
             this.app.changeCurrentProject(project);
@@ -170,7 +185,11 @@ export class Display {
             checklistItems.push(node.textContent);
         })
         taskData.checklist = checklistItems;
-        
+        this.app.addTaskToCurrentProject(taskData);
+        //resetting form and closing dialog on submit
+        this.DOM.form.formNode.reset();
+        this.DOM.form.checklistContent.textContent = "";
+        this.DOM.taskFormDialog.close();
     }
 
 }
