@@ -45,7 +45,7 @@ class App {
         this.state.currentProject = newProject;
         // this.display.renderProject(this.state);
     }
-    getProject(projectName) {
+    getProject(projectName) { 
         return this.state.projects.find( (obj) => obj.name === projectName );
     }
     createProject(projectName) {

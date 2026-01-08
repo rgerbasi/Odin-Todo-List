@@ -49,6 +49,8 @@ ul {
     --min-width: 320px;
   
     --sidebar-background: rgb(235, 235, 235);
+    --pill-button-border-radius: 9999px;
+
 }
 
 /* overall layout */
@@ -61,6 +63,7 @@ body {
 }
 .sidebar{
     width: 20%;
+    min-width: max-content;
     flex: none;
     display: flex;
     flex-flow: column;
@@ -78,9 +81,17 @@ body {
 }
 
 .projects {
-  margin: 0 auto;
+
   display: flex;
   flex-flow: column;
+}
+.projects button {
+  padding: 0.25rem 1rem;
+
+}
+.projects button:hover {
+  border-bottom: var(--sidebar-background) 0.25rem solid;
+  font-weight: bold;
 }
 .project-content {
     flex: 1 1 auto;
@@ -98,6 +109,20 @@ body {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  border-radius: var(--pill-button-border-radius);
+  padding: 0.25rem 1rem;
+}
+#new-project-button {
+  cursor: pointer;
+  border-radius: var(--pill-button-border-radius);
+  flex: none;
+}
+#new-project-button:hover {
+  background-color: #ccc;
+}
+.new-task-button:hover,
+.remove-project-button:hover {
+  border-bottom: #ccc 0.25rem solid;
 }
 .project-body {
   margin-top: 2rem;
@@ -109,14 +134,18 @@ body {
 .task-list {
   margin: 1rem 2rem;
 }
-.task-header {
+button.collapsible {
+  width: 100%;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
+  border-radius: var(--pill-button-border-radius);
+  padding: 0.25rem 1rem;
+}
+.active, button.collapsible:hover {
+  background-color: #e2e2e2;
+}
 
-}
-.task-body {
-  margin: 1rem 2rem;
-}
 /* newproject dialog layout and styles */
 #new-project-dialog > .dialog-content {
   display: flex;
@@ -230,6 +259,7 @@ button {
 svg {
   width: var(--svg-size);
   height: var(--svg-size);
+  flex: none;
 }
 .resize-handle {
     width: 5px;
