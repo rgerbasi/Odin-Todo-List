@@ -4,6 +4,7 @@ export class Display {
     //fields
     DOM = {};
     templates = {};
+    handlers = {};
     app;
 
     constructor (app) {
@@ -14,10 +15,17 @@ export class Display {
 
     //methods
     addInitialEventListeners() {
+        // listeners for elements that dont change from initial load
         this.DOM.newProjectButton.addEventListener('click' , this.handleOpenNewProjectDialog);
         this.DOM.projectList.addEventListener('click', this.handleProjectListClicked);
         this.attachNewProjectDialogListeners();
         this.attachTaskFormListeners();
+        // handlers for type of button for tasks
+        this.handlers = {
+            'collapsible': this.handleCollapsibleClicked,
+            'edit': this.handleEditClicked,
+            'delete': this.handleDeleteTaskClicked
+        }
     }
     attachNewProjectDialogListeners() {
         this.DOM.newProjectDialogBackButton.addEventListener('click', this.handleClose);
@@ -56,20 +64,21 @@ export class Display {
         let taskListDOM = currentProjectDOM.querySelector('.task-list')
         //for each task render dom and attach
         project.getTasks().forEach( (task) => {
-            
             taskListDOM.appendChild(this.createTaskDOM(task));
-  
+
         })
 
         //attach listeners
-        this.attachEventListenersToProjectPage(currentProjectDOM);
+        this.attachEventListenersToProjectPage(currentProjectDOM, taskListDOM);
         return currentProjectDOM;
     }
-    attachEventListenersToProjectPage(projectDOM) {
+    attachEventListenersToProjectPage(projectDOM, taskListDOM) {
         let addTaskButton = projectDOM.querySelector('.new-task-button');
         addTaskButton.addEventListener('click', this.handleOpenNewTaskDialog);
         let removeProjectButton = projectDOM.querySelector('.remove-project-button');
         removeProjectButton.addEventListener('click', this.handleRemoveProject); 
+        // task list click delegaator
+        taskListDOM.addEventListener('click', this.handleTaskListClickDelegator )
     }
     renderProjectPage(projectDOM) {
         this.DOM.projectContent.textContent = "";
@@ -78,7 +87,15 @@ export class Display {
     createTaskDOM(task) {
         let taskDOM = document.importNode(this.templates.taskTemplate.content, true);
         taskDOM.querySelector('.task-name').textContent = task.getTitle();
-        console.log(taskDOM);
+        taskDOM.querySelector('.task').setAttribute('data-task-name', task.getTitle());
+        console.dir(taskDOM);
+        // console.log(Object.entries(task))
+        let taskBodyDOM = taskDOM.querySelector('.task-body');
+        let infoString = "";
+        for (let [key, val] of Object.entries(task.getDetails())) {
+            infoString += `${key}: ${val}\n`;
+        }
+        taskBodyDOM.textContent = infoString;
         //attach handlers 
 
         return taskDOM;
@@ -190,6 +207,41 @@ export class Display {
         this.DOM.form.formNode.reset();
         this.DOM.form.checklistContent.textContent = "";
         this.DOM.taskFormDialog.close();
+    }
+
+    handleTaskListClickDelegator = (event) => {
+        const button = event.target.closest('button');
+        if (!button) return;
+        // console.log(button);
+        const taskDOM = event.target.closest('.task');
+        this.handlers[button.dataset.type](event, {
+            taskDOM: taskDOM,
+        });
+
+    }
+
+    handleCollapsibleClicked = (event, obj) => {
+        console.log('collapse');
+        console.log(obj.taskDOM)
+        const taskDOM = obj.taskDOM;
+
+        taskDOM.classList.toggle('active');
+        const taskBodyDOM = taskDOM.querySelector('.task-body');
+        console.log(taskBodyDOM.style.scrollHeight)
+        
+        if (taskBodyDOM.style.maxHeight) {
+            taskBodyDOM.style.maxHeight = null;
+        } else {
+            taskBodyDOM.style.maxHeight = taskBodyDOM.scrollHeight + "px"; 
+        }
+        
+
+    }
+    handleEditClicked = (event) => {
+        console.log('edit');
+    }
+    handleDeleteTaskClicked = (event) => {
+        console.log('delete');
     }
 
 }

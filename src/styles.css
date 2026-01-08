@@ -134,6 +134,10 @@ body {
 .task-list {
   margin: 1rem 2rem;
 }
+/* collapsible button holds task title */
+.task {
+  border-radius: 16px;
+}
 button.collapsible {
   width: 100%;
   display: flex;
@@ -143,7 +147,15 @@ button.collapsible {
   padding: 0.25rem 1rem;
 }
 .active, button.collapsible:hover {
-  background-color: #e2e2e2;
+  background-color: #ececec;
+}
+.task-body {
+  padding: 0 1rem;
+  max-height: 0;
+  overflow:hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #fcfcfc;
+
 }
 
 /* newproject dialog layout and styles */
