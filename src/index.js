@@ -31,14 +31,12 @@ class App {
             checklist: ['4', '5', '6 Things'],
             description: "Preemptive Data",
             dueDate: "2000-01-01T16:20",
-            notes: "Note note note",
+            notes: "",
             priority:"high",
             title:"Find thing to do",
         });
         this.display.renderSidebar(this.state);
         this.display.renderProjectPage(this.display.createProjectPage(this.state.currentProject))
-        //add task 
-        
     }
 
     changeCurrentProject(newProject) {
@@ -54,8 +52,9 @@ class App {
     }
     addTaskToCurrentProject(taskObject) {
         this.state.currentProject.addTask(new Task(taskObject));
-        // console.log(this.state.currentProject.getTasks());
     }
+
+    
 }
 
 const app = new App();

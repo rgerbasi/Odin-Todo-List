@@ -65,7 +65,6 @@ export class Display {
         //for each task render dom and attach
         project.getTasks().forEach( (task) => {
             taskListDOM.appendChild(this.createTaskDOM(task));
-
         })
 
         //attach listeners
@@ -88,18 +87,36 @@ export class Display {
         let taskDOM = document.importNode(this.templates.taskTemplate.content, true);
         taskDOM.querySelector('.task-name').textContent = task.getTitle();
         taskDOM.querySelector('.task').setAttribute('data-task-name', task.getTitle());
-        console.dir(taskDOM);
-        // console.log(Object.entries(task))
-        let taskBodyDOM = taskDOM.querySelector('.task-body');
-        let infoString = "";
-        for (let [key, val] of Object.entries(task.getDetails())) {
-            infoString += `${key}: ${val}\n`;
+        let taskInfoContainer = taskDOM.querySelector('.task-info-container');
+        
+        // console.log(task.getDetails())
+        for (let [key,val] of Object.entries(task.getDetails())) {
+            // console.log(`${key} : ${val}`)
+            if (key === 'title') continue;
+            let taskInfoRow = document.importNode(this.templates.taskInfoTemplate.content,true);
+
+            key = key === "dueDate" ? "Due date" : key;
+            taskInfoRow.querySelector('.property-key').textContent = Display.capitalize(key) + ":";
+            if (key === 'checklist'){
+                 taskInfoRow.querySelector('.property-value').textContent = val;
+            } else {
+                taskInfoRow.querySelector('.property-value').textContent = Display.capitalize(val);
+            }
+    
+            taskInfoContainer.appendChild(taskInfoRow);
         }
-        taskBodyDOM.textContent = infoString;
+
+        // let infoString = "";
+        // for (let [key, val] of Object.entries(task.getDetails())) {
+        //     infoString += `${key}: ${val}\n`;
+        // }
+        // taskBodyDOM.textContent = infoString;
+
         //attach handlers 
 
         return taskDOM;
     }
+
 
     cacheDOM(){
         this.DOM.sidebar = document.querySelector('.sidebar');
@@ -111,6 +128,7 @@ export class Display {
         this.templates.projectTemplate = document.querySelector('#project-template');
         this.templates.taskTemplate = document.querySelector('#task-template');
         this.templates.checklistTemplate = document.querySelector('#checklist-item-template');
+        this.templates.taskInfoTemplate = document.querySelector('#task-info');
 
         this.DOM.newProjectDialog = document.querySelector('#new-project-dialog');
         this.DOM.newProjectDialogTitle = document.querySelector('#new-project-h1');
@@ -203,10 +221,13 @@ export class Display {
         })
         taskData.checklist = checklistItems;
         this.app.addTaskToCurrentProject(taskData);
+        // console.log(taskData)
         //resetting form and closing dialog on submit
         this.DOM.form.formNode.reset();
         this.DOM.form.checklistContent.textContent = "";
         this.DOM.taskFormDialog.close();
+
+        this.renderProjectPage(this.createProjectPage(this.app.state.currentProject))
     }
 
     handleTaskListClickDelegator = (event) => {
@@ -244,4 +265,8 @@ export class Display {
         console.log('delete');
     }
 
+    static capitalize(word) {
+        if (word == null && typeof word !== "string") return;
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }
 }

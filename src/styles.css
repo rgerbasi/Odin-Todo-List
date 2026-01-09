@@ -136,14 +136,17 @@ body {
 }
 /* collapsible button holds task title */
 .task {
-  border-radius: 16px;
+  border-radius: 18px;
+}
+.task-header {
+  border-radius: inherit;
 }
 button.collapsible {
   width: 100%;
   display: flex;
   justify-content: space-between;
   cursor: pointer;
-  border-radius: var(--pill-button-border-radius);
+  border-radius: inherit;
   padding: 0.25rem 1rem;
 }
 .active, button.collapsible:hover {
@@ -155,9 +158,38 @@ button.collapsible {
   overflow:hidden;
   transition: max-height 0.2s ease-out;
   background-color: #fcfcfc;
-
 }
-
+.task-body-content {
+  padding: 0.5rem 0;
+  display: flex;
+}
+.task-info-container {
+  flex: 1;
+  display: flex;
+  flex-flow: column nowrap;
+  align-content: space-around;
+}
+.task-info-row {
+  display: flex;
+  gap: 0.5rem;
+}
+.task-body .button-container {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+}
+.task-body button {
+  border: white 2px solid;
+  padding: 0.1rem 1rem;
+  border-radius: var(--pill-button-border-radius);
+  font-weight: bold;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.property-key {
+  font-weight: bold;
+}
 /* newproject dialog layout and styles */
 #new-project-dialog > .dialog-content {
   display: flex;
@@ -221,7 +253,7 @@ form button:not(.svg-button),
 #new-project-dialog button {
   border: white 2px solid;
   padding: 0.25rem 2rem;
-  border-radius: 333px;
+  border-radius: var(--pill-button-border-radius);
   font-weight: bold;
   box-shadow: 
     0 2px 4px rgba(0, 0, 0, 0.3);

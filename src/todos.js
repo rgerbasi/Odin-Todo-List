@@ -21,13 +21,17 @@ export class Task {
     }
     //methods
     getDetails() {
-        return {
-            description: this.description,
-            dueDate: this.dueDate,
-            priority: this.priority,
-            notes: this.notes,
-            checklist: this.checklist,
+        let result= {};
+        for (let [key, val] of Object.entries(this)){
+            //dont want to send back an empty array saying there is a value;
+            if (val && val.length) {
+                if (key === "dueDate") {
+                    val = format(val, 'Pp')
+                }
+                result[key] = val;
+            }
         }
+        return result;
     }
     getTitle() { return this.title; }
 
