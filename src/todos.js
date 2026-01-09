@@ -26,7 +26,7 @@ export class Task {
             //dont want to send back an empty array saying there is a value;
             if (val && val.length) {
                 if (key === "dueDate") {
-                    val = format(val, 'Pp')
+                    val = format(val, 'PPp')
                 }
                 result[key] = val;
             }
