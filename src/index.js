@@ -19,6 +19,7 @@ class App {
         this.state.projects = [];
         this.state.projects.push(new Project({ name: 'Today' }));
         this.state.currentProject = this.state.projects[0];
+        this.state.toBeRemoved = {};
         this.addTaskToCurrentProject({
             checklist: ['1', '2', '3 Things'],
             description: "Preemptive Data",
@@ -47,13 +48,17 @@ class App {
         return this.state.projects.find( (obj) => obj.name === projectName );
     }
     createProject(projectName) {
-        this.state.projects.push(new Project({ name: projectName}));
+        let newProject = new Project({ name: projectName})
+        this.state.projects.push(newProject);
         this.display.renderSidebar(this.state);
+        return newProject;
     }
     addTaskToCurrentProject(taskObject) {
         this.state.currentProject.addTask(new Task(taskObject));
     }
+    removeProject(project) {
 
+    }
     
 }
 

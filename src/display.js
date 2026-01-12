@@ -20,6 +20,7 @@ export class Display {
         this.DOM.projectList.addEventListener('click', this.handleProjectListClicked);
         this.attachNewProjectDialogListeners();
         this.attachTaskFormListeners();
+        this.attachConfirmDialogListeners();
         // handlers for type of button for tasks
         this.handlers = {
             'collapsible': this.handleCollapsibleClicked,
@@ -43,8 +44,12 @@ export class Display {
             if (event.target === this.DOM.taskFormDialog) this.handleClose(event);
         });
     }
-    attachConfirmDialogListeners() {
-
+    attachConfirmDialogListeners() {    
+        this.DOM.confirmDialogNoButton.addEventListener('click', this.handleConfirmNoClicked );
+        this.DOM.confirmDialogYesButton.addEventListener('click', this.handleConfirmYesClicked);
+        this.DOM.confirmDialog.addEventListener('click', (event) => {
+            if (event.target === this.DOM.confirmDialog) this.handleConfirmNoClicked(event);
+        })     
     }
     renderSidebar(state) {
         this.DOM.projectList.textContent = "";
@@ -162,13 +167,17 @@ export class Display {
     //events 
     handleProjectListClicked = (event) => {
         let project = this.app.getProject(event.target.dataset.project);
+        //if clicked object has an existing project, change active project in state and render project page
         if (project) {
             this.app.changeCurrentProject(project);
             this.renderProjectPage(this.createProjectPage(project));
         }
     }
     handleCreateProject = (event) => {
-        this.app.createProject(this.DOM.newProjectDialogInput.value);
+        //create new project object change it in state and render it upon creation
+        let project = this.app.createProject(this.DOM.newProjectDialogInput.value);
+        this.app.changeCurrentProject(project);
+        this.renderProjectPage(this.createProjectPage(project));
         this.handleClose(event);
     }
     handleAddToChecklist = (event) => {
@@ -195,13 +204,17 @@ export class Display {
         this.DOM.taskFormDialog.showModal();
     }
     handleRemoveProject = (event) => {
-        console.log("beep removed");
+        //put the project to be removed on state before modal
+        this.app.state.toBeRemoved = this.app.state.currentProject;
+
+        this.DOM.confirmDialogTitle.textContent = 'Are you sure you want to remove the project?'
+        this.DOM.confirmDialog.showModal();
+
     }
  
     handleClose = (event) => {
         let dialogToClose = event.target.closest('dialog');
         // console.log(dialogToClose);
-
         dialogToClose.close();
     }
 
@@ -265,6 +278,20 @@ export class Display {
         console.log('delete');
     }
 
+
+    //confirm dialog methods
+    handleConfirmNoClicked = (event) => {
+        //reset toBeRemoved
+        this.app.state.toBeRemoved = null;
+        this.handleClose(event);
+
+    }
+    handleConfirmYesClicked = (event) => {
+        // console.log('yes')
+        // console.log(this.app.state)
+        // console.log(typeof this.app.state.toBeRemoved)
+    }
+    handle
     static capitalize(word) {
         if (word == null && typeof word !== "string") return;
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
