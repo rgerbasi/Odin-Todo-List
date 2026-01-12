@@ -1,5 +1,7 @@
 //display.js
 
+import { Project, Task } from "./todos";
+
 export class Display {
     //fields
     DOM = {};
@@ -37,6 +39,7 @@ export class Display {
     }
     attachTaskFormListeners() {
         this.DOM.form.formNode.addEventListener('submit', this.handleNewTaskSubmitted);
+        this.DOM.form.taskTitle.addEventListener('input', this.handleTitleInputChange);
         this.DOM.form.addToChecklistButton.addEventListener('click', this.handleAddToChecklist);
         this.DOM.form.closeButton.addEventListener('click', this.handleClose);
         this.DOM.form.xButton.addEventListener('click', this.handleClose);
@@ -88,15 +91,21 @@ export class Display {
         this.DOM.projectContent.textContent = "";
         this.DOM.projectContent.appendChild(projectDOM);
     }
+    renderCurrentProjectPage() {
+        this.renderProjectPage(this.createProjectPage(this.app.state.currentProject));
+    }
+    renderEmptyProjectPage() {
+        this.DOM.projectContent.textContent = "";
+    }
     createTaskDOM(task) {
         let taskDOM = document.importNode(this.templates.taskTemplate.content, true);
         taskDOM.querySelector('.task-name').textContent = task.getTitle();
         taskDOM.querySelector('.task').setAttribute('data-task-name', task.getTitle());
         let taskInfoContainer = taskDOM.querySelector('.task-info-container');
         
-        // console.log(task.getDetails())
+   
         for (let [key,val] of Object.entries(task.getDetails())) {
-            // console.log(`${key} : ${val}`)
+   
             if (key === 'title') continue;
             let taskInfoRow = document.importNode(this.templates.taskInfoTemplate.content,true);
 
@@ -110,15 +119,6 @@ export class Display {
     
             taskInfoContainer.appendChild(taskInfoRow);
         }
-
-        // let infoString = "";
-        // for (let [key, val] of Object.entries(task.getDetails())) {
-        //     infoString += `${key}: ${val}\n`;
-        // }
-        // taskBodyDOM.textContent = infoString;
-
-        //attach handlers 
-
         return taskDOM;
     }
 
@@ -170,14 +170,13 @@ export class Display {
         //if clicked object has an existing project, change active project in state and render project page
         if (project) {
             this.app.changeCurrentProject(project);
-            this.renderProjectPage(this.createProjectPage(project));
+            this.renderCurrentProjectPage();
         }
     }
     handleCreateProject = (event) => {
         //create new project object change it in state and render it upon creation
-        let project = this.app.createProject(this.DOM.newProjectDialogInput.value);
-        this.app.changeCurrentProject(project);
-        this.renderProjectPage(this.createProjectPage(project));
+        this.app.createProject(this.DOM.newProjectDialogInput.value);;
+        this.renderCurrentProjectPage();
         this.handleClose(event);
     }
     handleAddToChecklist = (event) => {
@@ -206,10 +205,8 @@ export class Display {
     handleRemoveProject = (event) => {
         //put the project to be removed on state before modal
         this.app.state.toBeRemoved = this.app.state.currentProject;
-
         this.DOM.confirmDialogTitle.textContent = 'Are you sure you want to remove the project?'
         this.DOM.confirmDialog.showModal();
-
     }
  
     handleClose = (event) => {
@@ -218,35 +215,41 @@ export class Display {
         dialogToClose.close();
     }
 
+    handleTitleInputChange = (event) => {
+        //unique title check
+        if (this.app.state.currentProject.getTaskByName(this.DOM.form.taskTitle.value.trim())) {
+            this.DOM.form.taskTitle.setCustomValidity('Task titles need to be unique.');
+        } else {
+            this.DOM.form.taskTitle.setCustomValidity('');
+        }
+    }
     handleNewTaskSubmitted = (event) => {
         event.preventDefault();
-
         if (!this.DOM.form.formNode.checkValidity()) {
             this.DOM.form.formNode.reportValidity();
             return;
         }
         const taskData = Object.fromEntries(new FormData(this.DOM.form.formNode));
-        
         let checklistItems = [];
         //loop through checklistContent
         this.DOM.form.checklistContent.querySelectorAll('.checklist-content').forEach( (node) => {
-            checklistItems.push(node.textContent);
+            checklistItems.push(node.textContent.trim());
         })
         taskData.checklist = checklistItems;
+        taskData.title = taskData.title.trim();
+   
         this.app.addTaskToCurrentProject(taskData);
-        // console.log(taskData)
         //resetting form and closing dialog on submit
         this.DOM.form.formNode.reset();
         this.DOM.form.checklistContent.textContent = "";
         this.DOM.taskFormDialog.close();
-
-        this.renderProjectPage(this.createProjectPage(this.app.state.currentProject))
+        this.renderCurrentProjectPage();
     }
 
     handleTaskListClickDelegator = (event) => {
         const button = event.target.closest('button');
         if (!button) return;
-        // console.log(button);
+
         const taskDOM = event.target.closest('.task');
         this.handlers[button.dataset.type](event, {
             taskDOM: taskDOM,
@@ -255,13 +258,11 @@ export class Display {
     }
 
     handleCollapsibleClicked = (event, obj) => {
-        console.log('collapse');
-        console.log(obj.taskDOM)
         const taskDOM = obj.taskDOM;
 
         taskDOM.classList.toggle('active');
         const taskBodyDOM = taskDOM.querySelector('.task-body');
-        console.log(taskBodyDOM.style.scrollHeight)
+
         
         if (taskBodyDOM.style.maxHeight) {
             taskBodyDOM.style.maxHeight = null;
@@ -274,24 +275,43 @@ export class Display {
     handleEditClicked = (event) => {
         console.log('edit');
     }
-    handleDeleteTaskClicked = (event) => {
-        console.log('delete');
+    handleDeleteTaskClicked = (event, obj) => {
+        
+        this.app.state.toBeRemoved = this.app.state.currentProject.getTaskByName(obj.taskDOM.dataset.taskName);
+        this.DOM.confirmDialogTitle.textContent = 'Are you sure you want to remove this task?'
+        this.DOM.confirmDialog.showModal();
+
     }
 
 
     //confirm dialog methods
     handleConfirmNoClicked = (event) => {
-        //reset toBeRemoved
+        //reset toBeRemoved and then close
         this.app.state.toBeRemoved = null;
         this.handleClose(event);
 
     }
     handleConfirmYesClicked = (event) => {
-        // console.log('yes')
-        // console.log(this.app.state)
-        // console.log(typeof this.app.state.toBeRemoved)
+        if (this.app.state.toBeRemoved instanceof Project) {
+            //if to be removed is a project remove project data, render different project
+            this.app.removeProject(this.app.state.toBeRemoved);
+            if (this.app.state.projects.length) {
+                this.app.changeCurrentProject(this.app.state.projects[0]);
+                this.renderCurrentProjectPage();
+            } else {
+                this.app.changeCurrentProject(null);
+                this.renderEmptyProjectPage();
+            }
+        } 
+        if (this.app.state.toBeRemoved instanceof Task) {
+            this.app.state.currentProject.removeTask(this.app.state.toBeRemoved);
+            document.querySelector(`[data-task-name="${this.app.state.toBeRemoved.getTitle()}"]`).remove();
+        
+        }
+        this.app.state.toBeRemoved = null;
+        this.handleClose(event);
+        
     }
-    handle
     static capitalize(word) {
         if (word == null && typeof word !== "string") return;
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();

@@ -49,10 +49,17 @@ export class Project {
     setName(newName) { this.name = newName; }
     getTasks() {return this.tasks; }
     addTask(task) { this.tasks.push(task); }
-    removeTask (taskTitleToRemove) {
-        let index = this.tasks.findIndex( (task) => task.getTitle() === taskTitleToRemove);
-        if (index === -1) return; 
+    removeTask (task) {
+        // let index = this.tasks.findIndex( (task) => task.getTitle() === taskTitleToRemove);
+        // if (index === -1) return; 
         // this.tasks.splice(index,1)
-        console.dir(this.tasks[index])
+        let index = this.tasks.indexOf(task)
+        if (index === -1) return;
+        this.tasks.splice(index,1);
+    }
+    getTaskByName(name) {
+        let index = this.tasks.findIndex( (task) => task.getTitle() === name);
+        if (index === -1) return null; 
+        return this.tasks[index];
     }
 }

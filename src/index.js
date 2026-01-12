@@ -50,14 +50,21 @@ class App {
     createProject(projectName) {
         let newProject = new Project({ name: projectName})
         this.state.projects.push(newProject);
+        this.changeCurrentProject(newProject);
         this.display.renderSidebar(this.state);
-        return newProject;
     }
     addTaskToCurrentProject(taskObject) {
         this.state.currentProject.addTask(new Task(taskObject));
     }
     removeProject(project) {
+        //if empty do nothign
+        if (!this.state.projects.length) return;
 
+        let index = this.state.projects.findIndex( (item) => item === this.state.toBeRemoved);
+        if (index === -1) return;
+        //remove project
+        this.state.projects.splice(index,1);
+        this.display.renderSidebar(this.state);
     }
     
 }

@@ -81,17 +81,19 @@ body {
 }
 
 .projects {
-
   display: flex;
   flex-flow: column;
+  gap: 0.5rem;
 }
 .projects button {
   padding: 0.25rem 1rem;
 
 }
-.projects button:hover {
-  border-bottom: var(--sidebar-background) 0.25rem solid;
+.projects button {
   font-weight: bold;
+}
+.projects button:hover {
+  background-color: #ccc;
 }
 .project-content {
     flex: 1 1 auto;
