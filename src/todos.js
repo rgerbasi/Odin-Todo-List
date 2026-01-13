@@ -1,7 +1,6 @@
 // todos.js
 import { format, } from "date-fns"
 
-
 export class Task {
     //fields
     title;
@@ -34,6 +33,19 @@ export class Task {
         return result;
     }
     getTitle() { return this.title; }
+    getDescription() {return this.description; }
+    getDueDate() { return this.dueDate; }
+    getPriority() {return this.priority; }
+    getNotes() {return this.notes; }
+    getChecklist() {return this.checklist; }
+    update(newTask) {
+        this.title = newTask.title ?? "";
+        this.description = newTask.description ?? "";
+        this.dueDate = newTask.dueDate ?? new Date();
+        this.priority = newTask.priority ?? "";
+        this.notes = newTask.notes ?? "";
+        this.checklist =newTask.checklist ?? [];
+    }
 
 }
 

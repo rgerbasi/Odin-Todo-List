@@ -20,6 +20,7 @@ class App {
         this.state.projects.push(new Project({ name: 'Today' }));
         this.state.currentProject = this.state.projects[0];
         this.state.toBeRemoved = {};
+        this.state.toEdit = null;
         this.addTaskToCurrentProject({
             checklist: ['1', '2', '3 Things'],
             description: "Preemptive Data",

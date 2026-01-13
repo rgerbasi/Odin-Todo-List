@@ -200,6 +200,9 @@ export class Display {
         this.DOM.newProjectDialog.showModal();
     }
     handleOpenNewTaskDialog = (event) => {
+        this.DOM.form.title.textContent = "Add a Task";
+        this.DOM.form.formNode.reset();
+        this.DOM.form.checklistContent.textContent = "";
         this.DOM.taskFormDialog.showModal();
     }
     handleRemoveProject = (event) => {
@@ -211,7 +214,9 @@ export class Display {
  
     handleClose = (event) => {
         let dialogToClose = event.target.closest('dialog');
-        // console.log(dialogToClose);
+        //reset State
+        this.app.state.toBeRemoved = null;
+        this.app.state.toEdit = null;
         dialogToClose.close();
     }
 
@@ -237,8 +242,14 @@ export class Display {
         })
         taskData.checklist = checklistItems;
         taskData.title = taskData.title.trim();
+        
+        if (this.app.state.toEdit){
+            let task = this.app.state.toEdit;
+            task.update(taskData);
+        } else {
+            this.app.addTaskToCurrentProject(taskData);
+        }
    
-        this.app.addTaskToCurrentProject(taskData);
         //resetting form and closing dialog on submit
         this.DOM.form.formNode.reset();
         this.DOM.form.checklistContent.textContent = "";
@@ -272,11 +283,27 @@ export class Display {
         
 
     }
-    handleEditClicked = (event) => {
-        console.log('edit');
+    handleEditClicked = (event, obj) => {
+        let task = this.app.state.currentProject.getTaskByName(obj.taskDOM.dataset.taskName);
+        this.app.state.toEdit = task ; 
+        this.DOM.form.title.textContent = "Edit Task";
+
+        //prepopulate form
+        this.DOM.form.taskTitle.value = task.getTitle();
+        this.DOM.form.dueDate.value = task.getDueDate();
+        this.DOM.form.description.value = task.getDescription();
+        this.DOM.form.priority.value = task.getPriority();
+        this.DOM.form.notes.value =task.getNotes();
+        //checklist
+        for (let checklistItem of task.getChecklist()){
+            this.DOM.form.checklistInput.value = checklistItem;
+            this.DOM.form.addToChecklistButton.click();
+        }
+        // this.DOM.checklistContent
+        this.DOM.taskFormDialog.showModal();
+    
     }
     handleDeleteTaskClicked = (event, obj) => {
-        
         this.app.state.toBeRemoved = this.app.state.currentProject.getTaskByName(obj.taskDOM.dataset.taskName);
         this.DOM.confirmDialogTitle.textContent = 'Are you sure you want to remove this task?'
         this.DOM.confirmDialog.showModal();
