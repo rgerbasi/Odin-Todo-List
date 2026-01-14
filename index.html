@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+<script defer src="main.js"></script></head>
+<body>
+    <!-- svgs and symbols -->
+    <svg style="display:none" aria-hidden="true">
+        <symbol id="plus" viewBox="0 0 24 24">
+            <path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z"></path>
+        </symbol>
+
+        <symbol id="chevron-down" vieweBox="0 0 24 24">
+            <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path>
+        </symbol>
+
+        <symbol id="chevron-up" vieweBox="0 0 24 24">
+           <path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"></path>
+        </symbol>
+
+        <symbol id="close-circle" viewBox="0 0 24 24">
+            <path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2 12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" ></path>
+        </symbol>
+    </svg>
+    <section class="sidebar">
+        <div class="header">
+            <h1>Things To Do</h1>
+        </div>
+
+        <div class="project-list-header">
+          
+            <button id="new-project">
+                <svg><use href="#plus"></use></svg>
+            </button>
+            <h2>Projects</h2>
+        </div>
+
+        <div class="projects">
+           
+        </div>
+    </section>
+    <div class="resize-handle"></div>
+
+    <section class="project-content">
+        <!-- template -->
+        
+    </section>
+
+       <!-- title,description, duedate, priority, notes, checklist? -->
+    
+    <dialog id="new-project-dialog" >
+        <div class="dialog-content">
+            <h1 id="new-project-h1">Create a new project</h1>
+            <label for="new-project">
+                Name
+                <input type="text" name="new-project" id="new-project">
+            </label>
+            <div class="button-container">
+                <button type="button" id="back-button">Back</button>
+                <button type="button" id="create-button">Create</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="task-form-dialog" >
+        <div class="dialog-content">
+            <form action="">
+                    <div class="top-of-form">
+                        <h1 class="form-title">Add a Task</h1>
+                        <button id="x-button" class="svg-button">
+                            <svg><use href="#close-circle"></use></svg>
+                        </button>
+                    </div>
+
+                    <div class="form-fields">
+                        <label for="task-title" class="text-label">
+                            Task Title
+                            <input type="text" name="task-title" id="task-title" placeholder="Title" required>
+                        </label>
+                        <label for="due-date">
+                            Due Date
+                            <input type="datetime-local" name="due-date" id="due-date">
+                        </label>
+                    </div>
+
+                    <div class="form-fields">
+                        <label for="description">
+                            Description
+                            <textarea name="description" id="description"></textarea>
+                        </label>
+                        <label for="priority">
+                            Priority
+                            <select name="priority" id="priority">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <label for="checklist">
+                        Checklist
+                        <div class="add-to-checklist-fields">
+                            <input type="text" name="checklist-item" id="checklist">
+                            <button type="button" id="add-to-checklist">
+                                add
+                            </button>
+                        </div>
+                    </label>
+                    <div class="checklist-content">
+                
+                    </div>
+                    
+                    <label for="notes">
+                        Notes
+                        <textarea name="notes" id="notes"></textarea>
+                    </label>
+
+                    <div class="button-container">
+                        <button type="button" id="close-button">Close</button>
+                        <button type="submit" id="submit-button">
+                            Submit
+                        </button>
+                    </div>
+
+            </form>
+         
+        </div>
+    </dialog>
+
+    <dialog id="confirm-dialog" >
+        <div class="dialog-content">
+            <h1 id="confirm-object">Are you sure you want to remove this?</h1>
+            <div class="button-container">
+                <button type="button" id="no">No</button>
+                <button type="button" id="yes">Yes</button>
+            </div>
+        </div>
+    </dialog>
+
+    <template id="project-template">
+        <div class="project">
+            <div class="project-header">
+                <h1 class="project-title">Today</h1>
+                <button id="new-task">
+                     Add Task
+                    <svg><use href="#plus"></use></svg>
+                </button>
+            </div>
+            <div class="project-body">
+                <h3>Tasks</h3>
+                <div class="task-list">
+                    <!-- task template -->
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <template id="task-template">
+        <div class="task">
+            <div class="task-header">
+                <h3 class="task-name">Task name</h3>
+                <button class="expand">
+                    <svg><use href="#chevron-down"></use></svg>
+                </button>
+            </div>
+
+            <div class="task-body">
+                
+            </div>
+            
+        </div>
+    </template>
+
+    <template id="checklist-item-template">
+        <div class="checklist-item">
+            <div class="checklist-content" contenteditable="true">
+
+            </div>
+            <button>
+                <svg><use href="#close-circle"></use></svg>
+            </button>
+        </div>
+    </template>
+
+    
+</body>
+</html>
