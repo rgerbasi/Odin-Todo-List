@@ -12,11 +12,11 @@
             <path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z"></path>
         </symbol>
 
-        <symbol id="chevron-down" vieweBox="0 0 24 24">
+        <symbol id="chevron-down" viewBox="0 0 24 24">
             <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path>
         </symbol>
 
-        <symbol id="chevron-up" vieweBox="0 0 24 24">
+        <symbol id="chevron-up" viewBox="0 0 24 24">
            <path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"></path>
         </symbol>
 
@@ -31,7 +31,7 @@
 
         <div class="project-list-header">
           
-            <button id="new-project">
+            <button id="new-project-button">
                 <svg><use href="#plus"></use></svg>
             </button>
             <h2>Projects</h2>
@@ -43,10 +43,7 @@
     </section>
     <div class="resize-handle"></div>
 
-    <section class="project-content">
-        <!-- template -->
-        
-    </section>
+    <section class="project-content"></section>
 
        <!-- title,description, duedate, priority, notes, checklist? -->
     
@@ -69,7 +66,7 @@
             <form action="">
                     <div class="top-of-form">
                         <h1 class="form-title">Add a Task</h1>
-                        <button id="x-button" class="svg-button">
+                        <button id="x-button" type="button" class="svg-button">
                             <svg><use href="#close-circle"></use></svg>
                         </button>
                     </div>
@@ -77,11 +74,11 @@
                     <div class="form-fields">
                         <label for="task-title" class="text-label">
                             Task Title
-                            <input type="text" name="task-title" id="task-title" placeholder="Title" required>
+                            <input type="text" name="title" id="task-title" placeholder="Title" required>
                         </label>
                         <label for="due-date">
                             Due Date
-                            <input type="datetime-local" name="due-date" id="due-date">
+                            <input type="datetime-local" name="dueDate" id="due-date">
                         </label>
                     </div>
 
@@ -103,15 +100,13 @@
                     <label for="checklist">
                         Checklist
                         <div class="add-to-checklist-fields">
-                            <input type="text" name="checklist-item" id="checklist">
+                            <input type="text"  id="checklist">
                             <button type="button" id="add-to-checklist">
                                 add
                             </button>
                         </div>
                     </label>
-                    <div class="checklist-content">
-                
-                    </div>
+                    <div class="checklist-content"></div>
                     
                     <label for="notes">
                         Notes
@@ -144,9 +139,13 @@
         <div class="project">
             <div class="project-header">
                 <h1 class="project-title">Today</h1>
-                <button id="new-task">
+                <button class="new-task-button">
                      Add Task
                     <svg><use href="#plus"></use></svg>
+                </button>
+                <button class="remove-project-button">
+                    Remove Project
+                    <svg><use href="#close-circle"></use></svg>
                 </button>
             </div>
             <div class="project-body">
@@ -161,25 +160,35 @@
     <template id="task-template">
         <div class="task">
             <div class="task-header">
-                <h3 class="task-name">Task name</h3>
-                <button class="expand">
+                <button class="collapsible" data-type="collapsible">
+                    <h3 class="task-name">Task name</h3>
                     <svg><use href="#chevron-down"></use></svg>
                 </button>
             </div>
 
             <div class="task-body">
-                
+                <div class="task-body-content">
+                    <div class="task-info-container"></div>
+                    <div class="button-container">
+                        <button type="button" data-type="edit">Edit</button>
+                        <button type="button" data-type="delete">Delete</button>
+                    </div>
+                </div>
             </div>
-            
+        </div>
+    </template>
+
+    <template id="task-info">
+        <div class="task-info-row">
+            <div class="property-key"></div>
+            <div class="property-value"></div>
         </div>
     </template>
 
     <template id="checklist-item-template">
         <div class="checklist-item">
-            <div class="checklist-content" contenteditable="true">
-
-            </div>
-            <button>
+            <div class="checklist-content" contenteditable="true"></div>
+            <button type="button" class="svg-button">
                 <svg><use href="#close-circle"></use></svg>
             </button>
         </div>
