@@ -21,6 +21,11 @@ class App {
         this.state.currentProject = this.state.projects[0];
         this.state.toBeRemoved = {};
         this.state.toEdit = null;
+        // this.addPreemptiveData();
+        this.display.renderSidebar(this.state);
+        this.display.renderProjectPage(this.display.createProjectPage(this.state.currentProject))
+    }
+    addPreemptiveData() {
         this.addTaskToCurrentProject({
             checklist: ['1', '2', '3 Things'],
             description: "Preemptive Data",
@@ -37,8 +42,6 @@ class App {
             priority:"high",
             title:"Find thing to do",
         });
-        this.display.renderSidebar(this.state);
-        this.display.renderProjectPage(this.display.createProjectPage(this.state.currentProject))
     }
 
     changeCurrentProject(newProject) {
