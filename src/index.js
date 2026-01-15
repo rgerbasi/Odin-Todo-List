@@ -17,11 +17,12 @@ class App {
     }
     init(){
         this.state.projects = [];
-        this.state.projects.push(new Project({ name: 'Today' }));
-        this.state.currentProject = this.state.projects[0];
+        // this.state.projects.push(new Project({ name: 'Today' }));
+        // this.state.currentProject = this.state.projects[0];
         this.state.toBeRemoved = {};
         this.state.toEdit = null;
         // this.addPreemptiveData();
+        this.readLocalStorage();
         this.display.renderSidebar(this.state);
         this.display.renderProjectPage(this.display.createProjectPage(this.state.currentProject))
     }
@@ -52,13 +53,16 @@ class App {
         return this.state.projects.find( (obj) => obj.name === projectName );
     }
     createProject(projectName) {
-        let newProject = new Project({ name: projectName})
+        let newProject = new Project({ name: projectName});
         this.state.projects.push(newProject);
+        this.updateLocalStorage();
+
         this.changeCurrentProject(newProject);
         this.display.renderSidebar(this.state);
     }
     addTaskToCurrentProject(taskObject) {
         this.state.currentProject.addTask(new Task(taskObject));
+        this.updateLocalStorage();
     }
     removeProject(project) {
         //if empty do nothign
@@ -68,7 +72,35 @@ class App {
         if (index === -1) return;
         //remove project
         this.state.projects.splice(index,1);
+        this.updateLocalStorage();
         this.display.renderSidebar(this.state);
+    }
+    updateLocalStorage() {
+        if (this.state.projects.length === 0) {
+            localStorage.clear();
+            return;
+        }
+        localStorage.setItem('projects', JSON.stringify(this.state.projects));
+    }
+    readLocalStorage() {
+        let storage = localStorage.getItem('projects');
+
+        if (!storage) {
+            this.state.projects.push(new Project({ name: 'Today' }));
+            this.state.currentProject = this.state.projects[0];
+            return;
+        }
+        
+        for (let storedProject of JSON.parse(storage)) {
+            let project = new Project({ name: storedProject.name });
+            for (let storedTask of storedProject.tasks) {
+          
+                project.addTask(new Task(storedTask));
+            }
+            this.state.projects.push(project);
+        }
+        this.state.currentProject = this.state.projects[0];
+        // console.dir(JSON.parse(storage));
     }
     
 }
